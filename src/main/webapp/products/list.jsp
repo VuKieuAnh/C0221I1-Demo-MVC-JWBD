@@ -25,7 +25,7 @@
             <td>${p.id}</td>
             <td>${p.name}</td>
             <td>${p.price}</td>
-            <td><a href="/products?action=edit&id=${p.id-1}">edit</a></td>
+            <td><a href="/products?action=edit&id=${p.id}">edit</a></td>
         </tr>
     </c:forEach>
 </table>

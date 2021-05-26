@@ -3,6 +3,7 @@ package controller;
 import service.IProductService;
 import service.ProductService;
 import model.Products;
+import service.ProductServiceJDBC;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ import java.util.List;
         value = "/products"
 )
 public class ProductController extends HttpServlet {
-    private IProductService productService = new ProductService();
+    private IProductService productService = new ProductServiceJDBC();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -72,7 +73,7 @@ public class ProductController extends HttpServlet {
         String name = req.getParameter("name");
         int price = Integer.parseInt(req.getParameter("price"));
         //tao moi doi tuong can luu
-        Products p = new Products(index+1,name, price);
+        Products p = new Products(index,name, price);
 
         //goi service
         productService.edit(index, p);
