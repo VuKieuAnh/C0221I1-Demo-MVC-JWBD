@@ -1,8 +1,8 @@
-package service;
+package service.product;
 
-import com.mysql.cj.jdbc.Driver;
 import model.Category;
 import model.Products;
+import service.ConnectionJDBC;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,31 +10,32 @@ import java.util.List;
 
 public class ProductServiceJDBC implements IProductService {
 
+    //tao connect
+    Connection c = new ConnectionJDBC().getConnect();
+
     public static final String UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID = "update product set name=?, price= ?, category_id=? where id=?";
 
-    private Connection getConnect(){
-        Connection connection = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/product_manager1",
-                    "root",
-                    "123456@Abc"
-            );
-            System.out.println("ket noi thanh cong");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("ket noi khong thanh cong");
-            e.printStackTrace();
-        }
-
-        return  connection;
-    }
+//    private Connection getConnect(){
+//        Connection connection = null;
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            connection = DriverManager.getConnection(
+//            "jdbc:mysql://localhost:3306/product_manager1",
+//                    "root",
+//                    "123456@Abc"
+//            );
+//            System.out.println("ket noi thanh cong");
+//        } catch (ClassNotFoundException | SQLException e) {
+//            System.out.println("ket noi khong thanh cong");
+//            e.printStackTrace();
+//        }
+//
+//        return  connection;
+//    }
 
 
     @Override
     public List<Products> findAll() {
-        //tao connect
-        Connection c = getConnect();
 
         List<Products> products = new ArrayList<>();
         try {
@@ -63,7 +64,6 @@ public class ProductServiceJDBC implements IProductService {
     @Override
     public Products findById(int id) {
         Products product = null;
-        Connection c = getConnect();
         try {
             PreparedStatement statement = c.prepareStatement(
                     "select * from product where id=?");
@@ -98,7 +98,6 @@ public class ProductServiceJDBC implements IProductService {
 
     @Override
     public void edit(int id, Products p) {
-        Connection c = getConnect();
         try {
            PreparedStatement prepareStatement=  c.prepareStatement(UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID);
             prepareStatement.setInt(4, id);

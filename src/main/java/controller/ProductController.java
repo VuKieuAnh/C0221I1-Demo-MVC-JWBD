@@ -1,10 +1,9 @@
 package controller;
 
 import model.Category;
-import service.IProductService;
-import service.ProductService;
+import service.product.IProductService;
 import model.Products;
-import service.ProductServiceJDBC;
+import service.product.ProductServiceJDBC;
 import service.category.CategoryService;
 import service.category.ICategoryService;
 

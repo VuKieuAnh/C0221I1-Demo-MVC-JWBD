@@ -1,6 +1,7 @@
 package service.category;
 
 import model.Category;
+import service.ConnectionJDBC;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -9,27 +10,11 @@ import java.util.List;
 
 public class CategoryService implements ICategoryService {
 
-    private Connection getConnect(){
-        Connection connection = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/product_manager1",
-                    "root",
-                    "123456@Abc"
-            );
-            System.out.println("ket noi thanh cong");
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println("ket noi khong thanh cong");
-            e.printStackTrace();
-        }
-
-        return  connection;
-    }
+    //tao connect
+    Connection connection = new ConnectionJDBC().getConnect();
 
     @Override
     public List<Category> findAll() {
-        Connection connection = getConnect();
 
         List<Category> categories = new ArrayList<>();
 
