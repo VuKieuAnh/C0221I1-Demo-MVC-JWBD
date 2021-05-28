@@ -1,6 +1,7 @@
 package service;
 
 import com.mysql.cj.jdbc.Driver;
+import model.Category;
 import model.Products;
 
 import java.sql.*;
@@ -8,12 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceJDBC implements IProductService {
+
+    public static final String UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID = "update product set name=?, price= ?, category_id=? where id=?";
+
     private Connection getConnect(){
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/product_manager",
+            "jdbc:mysql://localhost:3306/product_manager1",
                     "root",
                     "123456@Abc"
             );
@@ -35,7 +39,7 @@ public class ProductServiceJDBC implements IProductService {
         List<Products> products = new ArrayList<>();
         try {
             //tao cau query
-            PreparedStatement statement = c.prepareStatement("select * from product");
+            PreparedStatement statement = c.prepareStatement("select p.id, p.name, p.price, c.name as category_name from product p join category c on c.id = p.category_id;");
             //thuc thi cau query
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -43,6 +47,11 @@ public class ProductServiceJDBC implements IProductService {
                 String name = resultSet.getString("name");
                 int price = resultSet.getInt("price");
                 Products p = new Products(id, name, price);
+                //lay category
+                String category_name = resultSet.getString("category_name");
+                Category category = new Category(category_name);
+                p.setCategory(category);
+
                 products.add(p);
             }
         } catch (SQLException throwables) {
@@ -65,6 +74,9 @@ public class ProductServiceJDBC implements IProductService {
                 String name = set.getString("name");
                 int price = set.getInt("price");
                 product = new Products(id1, name, price);
+                int category_id = set.getInt("category_id");
+                Category category = new Category(category_id);
+                product.setCategory(category);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -88,10 +100,11 @@ public class ProductServiceJDBC implements IProductService {
     public void edit(int id, Products p) {
         Connection c = getConnect();
         try {
-           PreparedStatement prepareStatement=  c.prepareStatement("update product set name=?, price= ? where id=?");
-            prepareStatement.setInt(3, id);
+           PreparedStatement prepareStatement=  c.prepareStatement(UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID);
+            prepareStatement.setInt(4, id);
             prepareStatement.setString(1, p.getName());
             prepareStatement.setInt(2, p.getPrice());
+            prepareStatement.setInt(3, p.getCategory().getId());
             prepareStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

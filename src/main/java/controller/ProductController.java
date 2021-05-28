@@ -1,9 +1,12 @@
 package controller;
 
+import model.Category;
 import service.IProductService;
 import service.ProductService;
 import model.Products;
 import service.ProductServiceJDBC;
+import service.category.CategoryService;
+import service.category.ICategoryService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,6 +24,7 @@ import java.util.List;
 )
 public class ProductController extends HttpServlet {
     private IProductService productService = new ProductServiceJDBC();
+    private ICategoryService categoryService = new CategoryService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,9 +43,11 @@ public class ProductController extends HttpServlet {
 
     private void showFormEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("products/edit.jsp");
+        List<Category> categories = categoryService.findAll();
         int index = Integer.parseInt(req.getParameter("id")) ;
         Products products = productService.findById(index);
         req.setAttribute("product", products);
+        req.setAttribute("categories", categories);
         dispatcher.forward(req, resp);
     }
 
@@ -72,9 +78,11 @@ public class ProductController extends HttpServlet {
         int index = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
         int price = Integer.parseInt(req.getParameter("price"));
+        int category_id = Integer.parseInt(req.getParameter("category_id"));
         //tao moi doi tuong can luu
         Products p = new Products(index,name, price);
-
+        Category category = new Category(category_id);
+        p.setCategory(category);
         //goi service
         productService.edit(index, p);
         //tro ve trang danh sach

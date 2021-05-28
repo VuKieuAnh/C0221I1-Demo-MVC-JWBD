@@ -4,8 +4,24 @@ public class Products {
     private int id;
     private String name;
     private int price;
+    private Category category;
 
     public Products() {
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Products(int id, String name, int price, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
     }
 
     public Products(int id, String name, int price) {

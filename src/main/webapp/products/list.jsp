@@ -13,11 +13,12 @@
 </head>
 <body>
 <h1>Danh sach sp</h1>
-<table>
+<table border="1px solid">
     <tr>
         <td>id</td>
         <td>name</td>
         <td>price</td>
+        <td>category name</td>
         <td>action</td>
     </tr>
     <c:forEach items="${dssp}" var="p">
@@ -25,6 +26,7 @@
             <td>${p.id}</td>
             <td>${p.name}</td>
             <td>${p.price}</td>
+            <td>${p.category.name}</td>
             <td><a href="/products?action=edit&id=${p.id}">edit</a></td>
         </tr>
     </c:forEach>

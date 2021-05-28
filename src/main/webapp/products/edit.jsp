@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: kieuanh
@@ -16,6 +17,12 @@
 <%--    <input hidden name="id" value="${product.id}">--%>
     <input name="name" value="${product.name}">
     <input name="price" value="${product.price}">
+    <select name="category_id">
+    <c:forEach items="${categories}" var="c">
+        <option value="${c.id}">${c.name}</option>
+    </c:forEach>
+    </select>
+<%--    <input name="category_id" value="${product.category.id}">--%>
     <input type="submit" value="Edit">
 </form>
 
