@@ -11,7 +11,7 @@ import java.util.List;
 public class CategoryService implements ICategoryService {
 
     //tao connect
-    Connection connection = new ConnectionJDBC().getConnect();
+    Connection connection = ConnectionJDBC.getConnect();
 
     @Override
     public List<Category> findAll() {

@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductServiceJDBC implements IProductService {
 
     //tao connect
-    Connection c = new ConnectionJDBC().getConnect();
+    Connection connection = ConnectionJDBC.getConnect();
 
     public static final String UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID = "update product set name=?, price= ?, category_id=? where id=?";
 
@@ -40,7 +40,7 @@ public class ProductServiceJDBC implements IProductService {
         List<Products> products = new ArrayList<>();
         try {
             //tao cau query
-            PreparedStatement statement = c.prepareStatement("select p.id, p.name, p.price, c.name as category_name from product p join category c on c.id = p.category_id;");
+            PreparedStatement statement = connection.prepareStatement("select p.id, p.name, p.price, c.name as category_name from product p join category c on c.id = p.category_id;");
             //thuc thi cau query
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -65,7 +65,7 @@ public class ProductServiceJDBC implements IProductService {
     public Products findById(int id) {
         Products product = null;
         try {
-            PreparedStatement statement = c.prepareStatement(
+            PreparedStatement statement = connection.prepareStatement(
                     "select * from product where id=?");
             statement.setInt(1, id);
             ResultSet set = statement.executeQuery();
@@ -99,7 +99,7 @@ public class ProductServiceJDBC implements IProductService {
     @Override
     public void edit(int id, Products p) {
         try {
-           PreparedStatement prepareStatement=  c.prepareStatement(UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID);
+           PreparedStatement prepareStatement=  connection.prepareStatement(UPDATE_PRODUCT_SET_NAME_PRICE_WHERE_ID);
             prepareStatement.setInt(4, id);
             prepareStatement.setString(1, p.getName());
             prepareStatement.setInt(2, p.getPrice());

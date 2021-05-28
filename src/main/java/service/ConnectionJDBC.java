@@ -6,12 +6,17 @@ import java.sql.SQLException;
 
 public class ConnectionJDBC {
 
+    private static Connection connection;
+
+    private ConnectionJDBC() {
+    }
+
     public static final String URL = "jdbc:mysql://localhost:3306/product_manager1";
     public static final String USER = "root";
     public static final String PASSWORD = "123456@Abc";
 
-    public Connection getConnect(){
-        Connection connection = null;
+    public static Connection getConnect(){
+        if (connection==null){
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
@@ -23,6 +28,7 @@ public class ConnectionJDBC {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("ket noi khong thanh cong");
             e.printStackTrace();
+        }
         }
 
         return  connection;
